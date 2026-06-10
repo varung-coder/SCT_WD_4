@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro — Smart To-Do & Productivity Manager</title>
+    <meta name="description" content="A modern, premium productivity manager to handle all your daily tasks seamlessly.">
+    
+    <!-- Google Fonts: Poppins & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- SortableJS for smooth Drag and Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Animated Gradients & Particles -->
+    <div class="bg-gradient bg-purple"></div>
+    <div class="bg-gradient bg-blue"></div>
+    <div class="bg-gradient bg-cyan"></div>
+    <div class="particles"></div>
+    <div class="glass-overlay"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <i data-lucide="layers"></i>
+                    </div>
+                    <span>TaskFlow Pro</span>
+                </div>
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <p class="nav-label">Categories</p>
+                <ul id="categoryList">
+                    <li class="nav-item active" data-category="All">
+                        <i data-lucide="layout-grid"></i>
+                        <span>All Tasks</span>
+                    </li>
+                    <li class="nav-item" data-category="Personal">
+                        <i data-lucide="user"></i>
+                        <span>Personal</span>
+                    </li>
+                    <li class="nav-item" data-category="Work">
+                        <i data-lucide="briefcase"></i>
+                        <span>Work</span>
+                    </li>
+                    <li class="nav-item" data-category="Study">
+                        <i data-lucide="book-open"></i>
+                        <span>Study</span>
+                    </li>
+                    <li class="nav-item" data-category="Health">
+                        <i data-lucide="heart-pulse"></i>
+                        <span>Health</span>
+                    </li>
+                    <li class="nav-item" data-category="Shopping">
+                        <i data-lucide="shopping-cart"></i>
+                        <span>Shopping</span>
+                    </li>
+                </ul>
+                
+                <p class="nav-label mt-8">Filters</p>
+                <ul id="filterList">
+                    <li class="nav-item" data-filter="today">
+                        <i data-lucide="calendar"></i>
+                        <span>Today</span>
+                    </li>
+                    <li class="nav-item" data-filter="upcoming">
+                        <i data-lucide="calendar-days"></i>
+                        <span>Upcoming</span>
+                    </li>
+                    <li class="nav-item" data-filter="high-priority">
+                        <i data-lucide="alert-circle"></i>
+                        <span>High Priority</span>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="themeToggle" class="theme-toggle" title="Toggle Theme">
+                    <i data-lucide="sun"></i>
+                    <span>Light Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-open" id="mobileMenuOpen">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div>
+                        <h1 id="greetingMessage">Good Morning, Varun!</h1>
+                        <p class="date-display" id="currentDateDisplay">Let's be productive today.</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i data-lucide="search"></i>
+                        <input type="text" id="searchInput" placeholder="Search tasks...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats & Pomodoro -->
+            <section class="dashboard-stats">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon purple"><i data-lucide="list-todo"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalTasksCount">0</span>
+                        <span class="stat-label">Total Tasks</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon cyan"><i data-lucide="check-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="completedTasksCount">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon blue"><i data-lucide="clock"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="pendingTasksCount">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card progress-card">
+                    <div class="progress-info">
+                        <span class="stat-label">Productivity</span>
+                        <span class="stat-value" id="productivityPercent">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="productivityBar"></div>
+                        <!-- Progress glow -->
+                        <div class="progress-bar-glow" id="productivityBarGlow"></div>
+                    </div>
+                </div>
+                
+                <!-- Global Pomodoro Widget -->
+                <div class="pomodoro-widget glass-card">
+                    <div class="pomodoro-header">
+                        <i data-lucide="timer"></i> Focus Mode
+                    </div>
+                    <div class="pomodoro-time" id="pomodoroTime">25:00</div>
+                    <div class="pomodoro-controls">
+                        <button id="pomodoroStart" class="glow-hover"><i data-lucide="play"></i></button>
+                        <button id="pomodoroReset" class="glow-hover"><i data-lucide="rotate-ccw"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Task Area -->
+            <section class="task-section">
+                <div class="task-section-header">
+                    <h2 id="currentCategoryTitle">All Tasks</h2>
+                    <div class="task-filters">
+                        <button class="filter-btn active" data-status="all">All</button>
+                        <button class="filter-btn" data-status="pending">Pending</button>
+                        <button class="filter-btn" data-status="completed">Completed</button>
+                    </div>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon-container">
+                        <i data-lucide="sparkles" class="empty-icon floating"></i>
+                    </div>
+                    <h3>You're all caught up!</h3>
+                    <p>No tasks found here. Enjoy your free time or add a new goal.</p>
+                </div>
+
+                <!-- Skeleton Loader -->
+                <div class="skeleton-container" id="skeletonLoader" style="display: none;">
+                    <div class="skeleton-item glass-card">
+                        <div class="skeleton-checkbox"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line meta"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-item glass-card" style="animation-delay: 0.1s">
+                        <div class="skeleton-checkbox"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line meta"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-item glass-card" style="animation-delay: 0.2s">
+                        <div class="skeleton-checkbox"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line meta"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task List -->
+                <ul class="task-list" id="taskList">
+                    <!-- Tasks will be injected here via JS -->
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fabAddTask" title="Add New Task">
+        <i data-lucide="plus"></i>
+    </button>
+
+    <!-- Task Modal (Add/Edit) -->
+    <div class="modal-backdrop" id="taskModal">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Task</h2>
+                <button class="close-modal glow-hover" id="closeModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <form id="taskForm" class="modal-body">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label for="taskTitle">Task Title *</label>
+                    <input type="text" id="taskTitle" placeholder="What needs to be done?" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="taskDesc">Description</label>
+                    <textarea id="taskDesc" placeholder="Add some details..." rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="taskCategory">Category</label>
+                        <select id="taskCategory">
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Study">Study</option>
+                            <option value="Health">Health</option>
+                            <option value="Shopping">Shopping</option>
+                        </select>
+                    </div>
+                    <div class="form-group half">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="taskDate">Due Date</label>
+                        <input type="date" id="taskDate">
+                    </div>
+                    <div class="form-group half">
+                        <label for="taskTime">Due Time</label>
+                        <input type="time" id="taskTime">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancelTaskBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <!-- Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js?v=2"></script>
+</body>
+</html>
