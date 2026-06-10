@@ -8,8 +8,8 @@ Whether you're managing daily chores, tracking work deadlines, or focusing on st
 
 ## 🔗 Live Demo
 
-Experience the live application here:  
-**[SCT_WD_4 Live Demo](https://varung-coder.github.io/SCT_WD_4/)**
+Experience the live application here:  https://varung-coder.github.io/SCT_WD_4/
+
 
 ## ✨ Key Features
 
